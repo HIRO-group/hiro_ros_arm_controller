@@ -9,7 +9,7 @@ It works for both simulation and real robots.
 # Installation
 Assuming that you already have a catkin workspace
 TODO: We need to fix this
-```
+```sh
 mkdir -p ~/catkin_ws/src
 cd src
 git clone git@github.com:HIRO-group/hiro_ros_arm_controller.git
@@ -22,7 +22,7 @@ catkin build   # or catkin make
 # APIs
 
 Joint Position Control Example
-```
+```py
 if __name__ == '__main__':
     rospy.init_node('robot_controller', anonymous=True)
     controller = PandaController(is_sim=False)
