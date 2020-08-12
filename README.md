@@ -1,5 +1,5 @@
 # hiro_ros_arm_controller
-A high level APIs for controlling robotic arms
+A high level API for controlling robotic arms in ROS
 
 # Supported Robotic Arms
 - Franka Emika Panda
