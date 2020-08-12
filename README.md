@@ -1,2 +1,2 @@
 # hiro_ros_arm_controller
-A high level APIs for controlling robotic amrs
+A high level API for controlling robotic arms
