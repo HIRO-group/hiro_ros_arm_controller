@@ -230,7 +230,7 @@ if __name__ == '__main__':
     this is a simple example of creating a panda controller
     and publishing positions to all of the joints.
     """
-    rospy.init_node('robot_controller', anonymous=True)
-    controller = PandaController(is_sim=False)
+    rospy.init_node('robot_controller')
+    controller = PandaController(is_sim=True)
 
     controller.publish_positions([0, 0, 0, -0.0698, 0, 0, 0])
