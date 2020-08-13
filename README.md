@@ -1,4 +1,6 @@
-# hiro_ros_arm_controller
+# HIRO ROS Arm Controller
+`hiro_ros_arm_controller`
+
 A high level API for controlling robotic arms in ROS.
 It works for both simulation and real robots.
 
