@@ -58,7 +58,7 @@ specifies if we clone the `HIRO` repos via https or ssh.
 - `franka_build` <br>
 specifies whether we want to build `libfranka` from source or install it via `apt`.
 
-# APIs
+# API
 In any of your ros package, simply import our package
 
 Joint Position Control Example
