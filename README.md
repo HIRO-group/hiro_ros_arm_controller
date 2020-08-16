@@ -1,7 +1,7 @@
 # HIRO ROS Arm Controller
 `hiro_ros_arm_controller`
 
-A high level API for controlling robotic arms in ROS.
+A high level API (in the form of a ROS package) for controlling robotic arms in ROS.
 It works for both simulation and real robots.
 
 # Supported Robotic Arms
