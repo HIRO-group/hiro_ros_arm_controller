@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Code.
+Robot Arm class.
 """
 import sys
 import rospy
@@ -34,6 +34,19 @@ class RobotArm(object):
         `controller_names[1]` - velocity controllers
 
         `controllers_names[2]` - ONE trajectory controller.
+
+        Arguments
+        ---------
+        `num_joints`: `int` - number of joints on the robot
+
+        `is_sim`: `bool` - whether the robot is controlled in simulation or not.
+
+        `joint_states_topic`: `str` - the ros topic from which joint state data is received.
+
+        `ignore_joints_arr`: `List[str]` - the list of joint names' data to ignore from
+        the `joint_states_topic`.
+
+        `controller_names`: `List[List[str]]` - the controller names'.
         """
 
         self.num_joints = num_joints
@@ -61,6 +74,16 @@ class RobotArm(object):
         get the list of position, velocity
         and trajectory controllers depending on if we're
         in simulation or real life.
+
+        Arguments
+        ---------
+        `controller_names`: `List[List[str]]` - the list of list of strings
+        for controller names.
+
+        Returns
+        -------
+        `controller_names`: If `controller_names` is `None`, then it is reassigned
+        and modified.
         """
         if controller_names is None:
             controller_names = []
@@ -81,7 +104,11 @@ class RobotArm(object):
 
     def joint_names(self):
         """
-        get the joint names of the robot
+        get the joint names of the robot.
+
+        Returns
+        -------
+        `self.names`: `List[str]` - joint names list.
         """
         if self.data_exists:
             return self.names
@@ -90,7 +117,12 @@ class RobotArm(object):
 
     def joint_angles(self):
         """
-        gets the joint angles of the robot arm
+        gets the joint angles of the robot arm.
+
+        Returns
+        -------
+        `List[float]` - the list of joint positions for the arm, for the
+        valid indices.
         """
         if self.data_exists:
             return np.array(self.joint_data.position)[self.valid_indices]
@@ -100,6 +132,11 @@ class RobotArm(object):
     def joint_velocities(self):
         """
         gets the joint velocities of the robot arm
+
+        Returns
+        -------
+        `List[float]` - the list of joint velocities for the arm, for the
+        valid indices.
         """
         if self.data_exists:
             return np.array(self.joint_data.velocity)[self.valid_indices]
@@ -110,7 +147,15 @@ class RobotArm(object):
         """
         gets the joint angle based on the provided joint name.
 
-        returns nan if data does not exist (from the callback)
+        returns nan if the data does not exist (from the callback)
+
+        Arguments
+        ---------
+        `joint_name`: `str` - `joint_name' on the robot.
+
+        Returns
+        -------
+        `float`: joint angle
         """
         if self.data_exists:
             angles = self.joint_angles()
@@ -123,6 +168,14 @@ class RobotArm(object):
         gets the joint velocity based on the provided joint name.
 
         returns nan if data does not exist (from the callback)
+
+        Arguments
+        ---------
+        `joint_name`: `str` - `joint_name` on the robot.
+
+        Returns
+        -------
+        `float`: joint velocity
         """
         if self.data_exists:
             velocities = self.joint_velocities()
@@ -131,11 +184,23 @@ class RobotArm(object):
             return np.nan
 
     def set_joint_position_speed(self, speed=1.0):
+        """
+        sets the joint position speed.
+        However, this is not implemented yet.
+        """
         rospy.logerr('Set Joint Position Speed Not Implemented for Robot Arm')
 
     def move_to_joint_positions(self, positions, sleep=1.0, timeout=15.0):
         """
         moves robot to specific joint positions.
+
+        Arguments
+        ---------
+        `positions`: `List[float]` - list of joint positions
+
+        `sleep`: `float` - amount of time to sleep for
+
+        `timeout`: `float` - timeout time
         """
         if len(positions) != self.num_joints:
             raise InvalidNumJointException("Wrong number of joints for pos control.")
@@ -156,6 +221,10 @@ class RobotArm(object):
     def set_joint_velocities(self, velocities):
         """
         affects the set joint velocities
+
+        Arguments
+        ---------
+        `velocities`: `List[float]` - list of desired joint velocities.
         """
 
         if len(velocities) != self.num_joints:
@@ -174,6 +243,12 @@ class RobotArm(object):
     def set_joint_trajectory(self, trajectories, time_per_step=1.0):
         """
         sends a joint trajectory command.
+
+        Arguments
+        ---------
+        `trajectories`: 3-d tensor of shape (3, `num_joints`, `num_points`)
+
+        `time_per_step`: amount of time per step (point).
         """
         # 3d tensor of shape (3, n_joint, n_point)
         points_tensor = np.array(trajectories)
@@ -212,6 +287,13 @@ class RobotArm(object):
     def joint_state_callback(self, data):
         """
         callback that takes care of the joint state data.
+        You won't have to call explicitly; instead, you'll
+        need to publish to the topic that the callback
+        subscribes to.
+
+        Arguments
+        ---------
+        `data`: ros topic data.
         """
         self.joint_data = data
         if self.names is None:
@@ -230,6 +312,18 @@ class RobotArm(object):
         """
         gets position, velocity, and trajectory publisher(s). Lengths may
         be different. Publishers will be different.
+
+        Arguments
+        ---------
+        `controller_names`: controller names list of lists of strings,
+        as defined in earlier functions.
+
+        Returns
+        -------
+        `(joint_position_pubs, joint_velocity_pubs, traj_pub)`: `tuple` - a tuple
+        of the list of publishers for joint position control, the list of publishers
+        for joint velocity control, and the (one) joint trajectory controller.
+
         """
         pos_controller_names = controller_names[0]
         vel_controller_names = controller_names[1]
@@ -249,9 +343,20 @@ class RobotArm(object):
 
     def get_publishers_physical(self, pos_controller_names, vel_controller_names):
         """
-        gets
+        gets the
         joint position and joint velocity
         publishers in physical robot.
+        Joint trajectory controller support currently doesn't exist.
+
+        Arguments
+        ---------
+        `pos_controller_names`: `List[str]` - names of the position controllers.
+        `vel_controller_names`: `List[str]` - names of the velocity controllers.
+
+        Returns
+        -------
+        `joint_position_pubs`: a list of the ROS publishers used for joint position control. 
+        `joint_velocity_pubs`: a list of the ROS publishers used for the joint velocity control. 
         """
         joint_position_pubs = []
         joint_velocity_pubs = []
@@ -270,9 +375,20 @@ class RobotArm(object):
 
     def get_publishers_sim(self, pos_controller_names, vel_controller_names):
         """
-        gets
+        gets the
         joint position and joint velocity
-        publishers in simulation robot.
+        publishers in simulated robot.
+        Joint trajectory controller support currently doesn't exist.
+
+        Arguments
+        ---------
+        `pos_controller_names`: `List[str]` - names of the position controllers.
+        `vel_controller_names`: `List[str]` - names of the velocity controllers.
+
+        Returns
+        -------
+        `joint_position_pubs`: a list of the ROS publishers used for joint position control. 
+        `joint_velocity_pubs`: a list of the ROS publishers used for the joint velocity control. 
         """
         joint_position_pubs = []
         joint_velocity_pubs = []
