@@ -100,14 +100,15 @@ then
     rm -rf franka_ros
 fi
 
+# the simulation branch adds a few pieces from the standard franka_ros package in order to work with sim.
 git clone --branch simulation https://github.com/HIRO-group/franka_ros
 
 cd ..
 sudo apt install libboost-filesystem-dev
 rosdep install --from-paths src --ignore-src -y --skip-keys libfranka --skip-keys ros_robotic_skin --skip-keys libgazebo7-dev
-sudo apt install ros-melodic-imu-filter-madgwick ros-melodic-ros-control ros-melodic-ros-controllers
+sudo apt install ros-melodic-ros-control ros-melodic-ros-controllers
 cd src
-git clone git@github.com:HIRO-group/Custom_IMU_Madgwick_Filter.git
+
 # if franka build is desired from source
 if [[ $FRANKA_BUILD = "source" ]]
 then
@@ -145,7 +146,7 @@ sudo apt install ros-melodic-moveit-visual-tools
 
 
 
-# fix error from ld command
+# fix error from ld command - this is a hack, but the build fails without this.
 sed -i '48i\target_link_libraries(${PROJECT_NAME} yaml-cpp)' src/sawyer_simulator/sawyer_sim_controllers/CMakeLists.txt
 # clean things up before the show!
 rm -rf devel
