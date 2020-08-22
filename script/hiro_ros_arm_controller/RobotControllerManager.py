@@ -27,6 +27,9 @@ class RobotControllerManager():
 
         `controller_names[2]` - trajectory controller name* - `List[str]`
 
+        Arguments
+        ---------
+        `controller_names` - `List[List[str]]` - size 3 List[List[str]]
         """
         self.switch_controller_service_name = "/controller_manager/switch_controller"
         self.list_controller_service_name = "/controller_manager/list_controllers"
@@ -70,6 +73,11 @@ class RobotControllerManager():
         Based on mode type desired by user, switch controllers from current one.
 
         Desired mode should be a ControllerType enum
+
+        Arguments
+        ---------
+        `desired_mode`: `ControllerType` - enum for the type of controller
+        (joint .. trajectory, velocity, and position controllers)
         """
         # check if mode is running
         if desired_mode == self.mode:
