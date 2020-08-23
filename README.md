@@ -9,7 +9,7 @@ It works for both simulation and real robots.
 - Rethink Robotics Sawyer
 
 # Quick Installation
-Assuming that you already have a catkin workspace
+Assuming that you already have a catkin workspace:
 ```sh
 mkdir -p ~/catkin_ws/src
 cd src
