@@ -24,20 +24,24 @@ catkin build   # or catkin make
 
 We have an `install.sh` script that will install the following packages:
 
-- Installs our Python `hiro_ros_arm_controller` package [here](https://github.com/HIRO-group/hiro_ros_arm_controller)
+- Installs this package
 
 - The Franka Panda Gazebo Simulator package [here](https://github.com/HIRO-group/panda_simulation)
+
+- External dependencies needed for the `panda_simulation` package
 
 - The Sawyer Gazebo simulator
 
 ## To run `install.sh`
-Make sure that you have cloned this repository from the `src` folder of a catkin workspace (eg: from `catkin_ws/src`). If you haven't, the script will give an error.
+Make sure that you have cloned this repository from the `src` folder of a catkin workspace (eg: from `catkin_ws/src`). If you haven't, the script will give an error, and it won't build the whole workspace.
+
 Additionally, you should clone this repository in an **empty** catkin workspace. For example, if you have the `franka_ros` package in the workspace, it will be deleted in favor of our forked version that works with this package.
 
 ### Usage:
 ```sh
 ./install.sh --git-option https|ssh --franka-build apt|source
 ```
+
 
 ### Examples
 1. Simply Run (Default options= `ssh` && `apt`)
@@ -59,7 +63,7 @@ specifies if we clone the `HIRO` repos via https or ssh.
 specifies whether we want to build `libfranka` from source or install it via `apt`.
 
 # API
-In any of your ros package, simply import our package
+In any of your ros packages, simply import our package.
 
 Joint Position Control Example
 ```py
@@ -71,3 +75,5 @@ if __name__ == '__main__':
 
     controller.publish_positions([0, 0, 0, -0.0698, 0, 0, 0])
 ```
+
+This example creates a ROS node, creates a PandaController with `is_sim` set to `False` (so, real robot control), and publishes a list of desired joint positions to follow.
