@@ -201,7 +201,7 @@ class RobotController(object):
         """
         sets position list.
 
-        `poses`: List - containing the following - 
+        `poses`: List - containing the following -
             - Each entry in `poses` consists of three components: positions,
             _, and the pose_name.
 
@@ -216,7 +216,7 @@ class RobotController(object):
         """
         sets velocities list.
 
-        `poses`: List - containing the following - 
+        `poses`: List - containing the following -
             - Each entry in `poses` consists of three components: _,
             velocities, and the pose_name.
 
