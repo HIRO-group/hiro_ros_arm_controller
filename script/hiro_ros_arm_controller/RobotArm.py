@@ -355,8 +355,8 @@ class RobotArm(object):
 
         Returns
         -------
-        `joint_position_pubs`: a list of the ROS publishers used for joint position control. 
-        `joint_velocity_pubs`: a list of the ROS publishers used for the joint velocity control. 
+        `joint_position_pubs`: a list of the ROS publishers used for joint position control.
+        `joint_velocity_pubs`: a list of the ROS publishers used for the joint velocity control.
         """
         joint_position_pubs = []
         joint_velocity_pubs = []
@@ -387,8 +387,8 @@ class RobotArm(object):
 
         Returns
         -------
-        `joint_position_pubs`: a list of the ROS publishers used for joint position control. 
-        `joint_velocity_pubs`: a list of the ROS publishers used for the joint velocity control. 
+        `joint_position_pubs`: a list of the ROS publishers used for joint position control.
+        `joint_velocity_pubs`: a list of the ROS publishers used for the joint velocity control.
         """
         joint_position_pubs = []
         joint_velocity_pubs = []
