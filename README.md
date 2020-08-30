@@ -17,7 +17,7 @@ git clone git@github.com:HIRO-group/hiro_ros_arm_controller.git
 cd hiro_ros_arm_controller
 ./install.sh
 cd ../..
-catkin build   # or catkin make
+catkin build   # or catkin_make
 ```
 
 # Detailed Installation
