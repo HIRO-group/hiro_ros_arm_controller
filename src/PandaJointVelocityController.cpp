@@ -80,7 +80,7 @@ void PandaJointVelocityController::update(const ros::Time& time,
     franka::RobotState robot_state = state_handle_->getRobotState();
 
     // If there is no command for more than 0.1 sec, set velocity to 0.0
-    if (ros::Time::now().toSec() - last_time_called > 0.1) {
+    if (ros::Time::now().toSec() - last_time_called > 0.05) {
         for (int i = 0; i < 7; i++) velocity_joint_handles_[i].setCommand(0.0);
     } else {  // If command recieved, send the command to the controller
         for (int i = 0; i < 7; i++) {
@@ -95,7 +95,7 @@ void PandaJointVelocityController::update(const ros::Time& time,
 
 void PandaJointVelocityController::stopping(const ros::Time& /*time*/) {
     // WARNING: DO NOT SEND ZERO VELOCITIES HERE AS IN CASE OF ABORTING DURING MOTION
-    // A JUMP TO ZERO WILL BE COMMANDED PUTTING HIGH LOADS ON THE ROBOT. LET THE DEFAULT
+    // A JUMP TO ZERO WILL BE COMMANDED PUTTING HIGH LOADS ON THE ROBOT. LET THE DEFAUL`T
     // BUILT-IN STOPPING BEHAVIOR SLOW DOWN THE ROBOT.
 }
 

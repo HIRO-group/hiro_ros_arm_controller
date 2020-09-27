@@ -1,5 +1,5 @@
 panda_joint_position_controller:
-    type: ros_robotic_skin/PandaJointPositionController
+    type: hiro_ros_arm_controller/PandaJointPositionController
     arm_id: panda
     joint_names:
         - panda_joint1
@@ -19,7 +19,7 @@ panda_joint_position_controller:
         - 1.0
 
 panda_joint_velocity_controller:
-    type: ros_robotic_skin/PandaJointVelocityController
+    type: hiro_ros_arm_controller/PandaJointVelocityController
     arm_id: panda
     joint_names:
         - panda_joint1

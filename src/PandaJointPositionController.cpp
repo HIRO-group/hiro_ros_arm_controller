@@ -146,7 +146,6 @@ void PandaJointPositionController::jointCommandCb(const std_msgs::Float64MultiAr
 
     for (int i = 0; i < 7; i++) {
         commanded_joint_positions[i] = joint_position_commands->data[i];
-        ROS_INFO_STREAM("PandaJointPositionController::jointCommandCb::Joint " << i << " " << commanded_joint_positions[i]);
     }
 }
 
