@@ -144,6 +144,7 @@ include_directories(
 
 ## Declare a C++ library
 add_library(hiro_ros_arm_controller
+  src/PandaAdmittanceController.cpp
   src/PandaJointVelocityController.cpp
   src/PandaJointPositionController.cpp
 )
