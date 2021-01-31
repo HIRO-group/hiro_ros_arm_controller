@@ -32,6 +32,7 @@ class PandaJointVelocityController : public controller_interface::MultiInterface
     ros::Subscriber sub_command_;
     std::array<double, 7> joint_velocities{};
     double last_time_called;
+    ros::Duration elapsed_time_;
 };
 
 }  // namespace hiro_panda

@@ -47,7 +47,7 @@ bool PandaJointVelocityController::init(hardware_interface::RobotHW* robot_hardw
 
     last_time_called = ros::Time::now().toSec();
 
-    sub_command_ = node_handle.subscribe<std_msgs::Float64MultiArray>("command", 10, &PandaJointVelocityController::jointCommandCb, this);
+    sub_command_ = node_handle.subscribe<std_msgs::Float64MultiArray>("command", 1, &PandaJointVelocityController::jointCommandCb, this);
 
     std::string arm_id;
     if (!node_handle.getParam("arm_id", arm_id)) {
@@ -82,6 +82,7 @@ void PandaJointVelocityController::update(const ros::Time& time,
     // If there is no command for more than 0.1 sec, set velocity to 0.0
     if (ros::Time::now().toSec() - last_time_called > 0.05) {
         for (int i = 0; i < 7; i++) velocity_joint_handles_[i].setCommand(0.0);
+
     } else {  // If command recieved, send the command to the controller
         for (int i = 0; i < 7; i++) {
             // Print out to the terminal just for the 1st joint for debugging.
@@ -91,6 +92,7 @@ void PandaJointVelocityController::update(const ros::Time& time,
             velocity_joint_handles_[i].setCommand(joint_velocities[i]);
         }
     }
+    
 }
 
 void PandaJointVelocityController::stopping(const ros::Time& /*time*/) {
