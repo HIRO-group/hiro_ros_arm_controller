@@ -1,4 +1,4 @@
-#include <hiro_ros_arm_controller/zScore.h>
+#include <zScore.h>
 
 
 // Constructors

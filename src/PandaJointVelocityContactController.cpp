@@ -3,12 +3,18 @@
 #include <PandaJointVelocityContactController.h>
 
 #include <cmath>
+#include <memory>
 
 #include <controller_interface/controller_base.h>
-#include <hardware_interface/hardware_interface.h>
-#include <hardware_interface/joint_command_interface.h>
 #include <pluginlib/class_list_macros.h>
+
+#include "std_msgs/Float64.h"
+#include "std_msgs/Float64MultiArray.h"
+#include <franka/robot_state.h>
 #include <ros/ros.h>
+#include "pseudo_inversion.h"
+#include <numeric>
+#include <Eigen/Core>
 
 namespace hiro_panda {
 
@@ -41,7 +47,7 @@ void PandaJointVelocityContactController::setPublishers( ros::NodeHandle& node_h
 
 }
 
-bool JointVelocityExampleController::setupController(hardware_interface::RobotHW* robot_hardware, ros::NodeHandle& node_handle){
+bool PandaJointVelocityContactController::setupController(hardware_interface::RobotHW* robot_hardware, ros::NodeHandle& node_handle){
   
   velocity_joint_interface_ = robot_hardware->get<hardware_interface::VelocityJointInterface>();
   if (velocity_joint_interface_ == nullptr) {

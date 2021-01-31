@@ -3,7 +3,6 @@
 #include <PandaJointVelocityController.h>
 
 #include <cmath>
-
 #include <controller_interface/controller_base.h>
 #include <hardware_interface/hardware_interface.h>
 #include <hardware_interface/joint_command_interface.h>

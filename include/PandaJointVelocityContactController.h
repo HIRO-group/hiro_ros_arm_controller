@@ -13,11 +13,10 @@
 #include <ros/node_handle.h>
 #include <ros/time.h>
 #include <std_msgs/Float64MultiArray.h>
-
+#include <zScore.h>
 #include <Eigen/Core>
 
 
-#include <hiro_ros_arm_controller/zScore.h>
 
 
 namespace hiro_panda {
