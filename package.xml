@@ -5,7 +5,7 @@
   <description>The hiro_ros_arm_controller package</description>
   <license>MIT</license>
   <maintainer email="kandai.wata@gmail.com">Kandai Watanabe</maintainer>
-  <maintainer email="matthew.strong@colorado.edu">Matthew Strong</maintainer>
+  <maintainer email="matthew.strong@colorado.edu">Matt Strong</maintainer>
 
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
