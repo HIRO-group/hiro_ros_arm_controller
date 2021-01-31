@@ -14,70 +14,234 @@ namespace hiro_panda {
 
 bool PandaJointVelocityContactController::init(hardware_interface::RobotHW* robot_hardware,
                                         ros::NodeHandle& node_handle) {
-    velocity_joint_interface_ = robot_hardware->get<hardware_interface::VelocityJointInterface>();
-    if (velocity_joint_interface_ == nullptr) {
-        ROS_ERROR(
-            "PandaJointVelocityContactController: Error getting velocity joint interface from hardware!");
-        return false;
-    }
-    std::vector<std::string> joint_names;
-    if (!node_handle.getParam("joint_names", joint_names)) {
-        ROS_ERROR("PandaJointVelocityContactController: Could not parse joint names");
-    }
-    if (joint_names.size() != 7) {
-        ROS_ERROR_STREAM("PandaJointVelocityContactController: Wrong number of joint names, got "
-                        << joint_names.size() << " instead of 7 names!");
-        return false;
-    }
+    setValueTrackers();
+    setPublishers(node_handle);
+    setSignalParsers(node_handle);
+    return setupController(robot_hardware, node_handle);
+}
 
-    velocity_joint_handles_.resize(7);
-    for (size_t i = 0; i < 7; ++i) {
-        try {
-        velocity_joint_handles_[i] = velocity_joint_interface_->getHandle(joint_names[i]);
-        } catch (const hardware_interface::HardwareInterfaceException& ex) {
-        ROS_ERROR_STREAM(
-            "PandaJointVelocityContactController: Exception getting joint handles: " << ex.what());
-        return false;
-        }
-    }
 
-    for (int i = 0; i < 7; i++) {
-        joint_velocities[i] = 0.0;
-    }
+// Helper functions to clean up the robot setup
+void PandaJointVelocityContactController::setPublishers( ros::NodeHandle& node_handle){
+  ext_cart_force_pub_x = node_handle.advertise<std_msgs::Float64>("ext_cart_force_x", 1);
+  ext_cart_force_pub_y = node_handle.advertise<std_msgs::Float64>("ext_cart_force_y", 1);
+  ext_cart_force_pub_z = node_handle.advertise<std_msgs::Float64>("ext_cart_force_z", 1);
 
-    last_time_called = ros::Time::now().toSec();
 
-    sub_command_ = node_handle.subscribe<std_msgs::Float64MultiArray>("command", 10, &PandaJointVelocityContactController::jointCommandCb, this);
+  x_dot_pub = node_handle.advertise<std_msgs::Float64>("x_dot", 1);
+  y_dot_pub = node_handle.advertise<std_msgs::Float64>("y_dot", 1);
+  z_dot_pub = node_handle.advertise<std_msgs::Float64>("z_dot", 1);
 
-    std::string arm_id;
-    if (!node_handle.getParam("arm_id", arm_id)) {
-        ROS_ERROR("PandaJointVelocityContactController: Could not read parameter arm_id");
-        return false;
-    }
-    auto* state_interface = robot_hardware->get<franka_hw::FrankaStateInterface>();
-    if (state_interface == nullptr) {
-        ROS_ERROR_STREAM("PandaJointVelocityContactController: Error getting state interface from hardware");
-        return false;
-    }
+  cart_ext_pub1 = node_handle.advertise<std_msgs::Float64>("cart_ext_pub1", 1);
+  cart_ext_pub2 = node_handle.advertise<std_msgs::Float64>("cart_ext_pub2", 1);
+  cart_ext_pub3 = node_handle.advertise<std_msgs::Float64>("cart_ext_pub3", 1);
+  cart_ext_sum = node_handle.advertise<std_msgs::Float64>("cart_ext_sum", 1);
+
+  external_wrench_pub = node_handle.advertise<std_msgs::Float64MultiArray>("external_wrench", 1);
+
+}
+
+bool JointVelocityExampleController::setupController(hardware_interface::RobotHW* robot_hardware, ros::NodeHandle& node_handle){
+  
+  velocity_joint_interface_ = robot_hardware->get<hardware_interface::VelocityJointInterface>();
+  if (velocity_joint_interface_ == nullptr) {
+    ROS_ERROR(
+        "PandaJointVelocityContactController: Error getting velocity joint interface from hardware!");
+    return false;
+  }
+  std::vector<std::string> joint_names;
+  if (!node_handle.getParam("joint_names", joint_names)) {
+    ROS_ERROR("PandaJointVelocityContactController: Could not parse joint names");
+  }
+  if (joint_names.size() != 7) {
+    ROS_ERROR_STREAM("PandaJointVelocityContactController: Wrong number of joint names, got "
+                     << joint_names.size() << " instead of 7 names!");
+    return false;
+  }
+  velocity_joint_handles_.resize(7);
+  for (size_t i = 0; i < 7; ++i) {
     try {
-        state_handle_ = std::make_unique<franka_hw::FrankaStateHandle>(
-            state_interface->getHandle(arm_id + "_robot"));
-    } catch (hardware_interface::HardwareInterfaceException& ex) {
-        ROS_ERROR_STREAM(
-            "PandaJointVelocityContactController: Exception getting state handle from interface: " << ex.what());
-        return false;
+      velocity_joint_handles_[i] = velocity_joint_interface_->getHandle(joint_names[i]);
+    } catch (const hardware_interface::HardwareInterfaceException& ex) {
+      ROS_ERROR_STREAM(
+          "PandaJointVelocityContactController: Exception getting joint handles: " << ex.what());
+      return false;
     }
+  }
 
-    return true;
+  last_time_called = ros::Time::now().toSec();
+
+  sub_command_ = node_handle.subscribe<std_msgs::Float64MultiArray>("command", 10, &PandaJointVelocityContactController::jointCommandCb, this);
+
+
+  auto* model_interface = robot_hardware->get<franka_hw::FrankaModelInterface>();
+  if (model_interface == nullptr) {
+    ROS_ERROR_STREAM("PandaJointVelocityContactController: Error getting model interface from hardware");
+    return false;
+  }
+  try {
+    model_handle_ = std::make_unique<franka_hw::FrankaModelHandle>(
+        model_interface->getHandle("panda_model"));
+  } catch (hardware_interface::HardwareInterfaceException& ex) {
+    ROS_ERROR_STREAM(
+        "PandaJointVelocityContactController: Exception getting model handle from interface: " << ex.what());
+    return false;
+  }
+
+  auto state_interface = robot_hardware->get<franka_hw::FrankaStateInterface>();
+  if (state_interface == nullptr) {
+    ROS_ERROR("PandaJointVelocityContactController: Could not get state interface from hardware");
+    return false;
+  }
+
+  try {
+    state_handle_ = std::make_unique<franka_hw::FrankaStateHandle>(
+        state_interface->getHandle("panda_robot"));
+
+  } catch (const hardware_interface::HardwareInterfaceException& e) {
+    ROS_ERROR_STREAM(
+        "PandaJointVelocityContactController: Exception getting state handle: " << e.what());
+    return false;
+  }
+
+  return true;
+
+}
+
+
+void PandaJointVelocityContactController::setSignalParsers( ros::NodeHandle& node_handle){
+  this->signal_parser_x = zScore(node_handle, "x");
+  this->signal_parser_y = zScore(node_handle, "y");
+  this->signal_parser_z = zScore(node_handle, "z");
+}
+
+void PandaJointVelocityContactController::setValueTrackers(){
+  for (int i = 0; i < 7; i++)
+  {
+    this->prev_qd[i] = 0.0;
+  }
+  this->loops_without_signal = 0;
+  this->loops_with_signal = 0;
+}
+
+Eigen::MatrixXd PandaJointVelocityContactController::getCartesianVelocity(
+                                       Eigen::Map<Eigen::Matrix<double, 6, 7>> &jacobian,
+                                       Eigen::Map<Eigen::Matrix<double, 7, 1>> &q_dot,
+                                       bool publish_velocity){
+  Eigen::MatrixXd x_dot = jacobian * q_dot;
+  if(publish_velocity){
+    x_dot_pub.publish(x_dot(0));
+    y_dot_pub.publish(x_dot(1));
+    z_dot_pub.publish(x_dot(2));  
+  }
+  return x_dot;
+}
+
+void PandaJointVelocityContactController::updateSignalThresholds(Eigen::MatrixXd& x_dot){
+  signal_parser_x.updateThreshold(x_dot(0));
+  signal_parser_y.updateThreshold(x_dot(1));
+  signal_parser_z.updateThreshold(x_dot(2));
+}
+
+Eigen::Map<Eigen::Matrix<double, 7, 1>> PandaJointVelocityContactController::updateJointAcceleration(franka::RobotState &robot_state, 
+                                                             std::array<double, 7> &joint_accs,
+                                                             const ros::Duration& period){
+    for (int i = 0; i < 7; i++){ 
+    joint_accs[i] = (robot_state.dq[i] - prev_qd[i]) / (period.toSec() * 10);
+    prev_qd[i] = robot_state.dq[i];
+  }
+  
+  return Eigen::Map<Eigen::Matrix<double, 7, 1>>(joint_accs.data());
+}
+
+  Eigen::MatrixXd PandaJointVelocityContactController::getExternalWrench(
+                                    Eigen::Map<Eigen::Matrix<double, 6, 7>>& pinv,
+                                    Eigen::Map<Eigen::Matrix<double, 7, 1>>& tau_measured,
+                                    Eigen::Map<Eigen::Matrix<double, 7, 1>>& gravity,
+                                    Eigen::Map<Eigen::Matrix<double, 7, 1>>& coriolis_matrix,
+                                    Eigen::Map<Eigen::Matrix<double, 7, 7>>& mass_matrix,
+                                    Eigen::Map<Eigen::Matrix<double, 7, 1>>& ddq,
+                                    Eigen::Map<Eigen::Matrix<double, 6, 1>>& wrench,
+                                    bool publish_values){
+  
+  Eigen::VectorXd tau_ext = tau_measured - gravity - tau_ext_initial_;
+  Eigen::MatrixXd ext_cartesian_wrench = (pinv  * (tau_measured - gravity -  coriolis_matrix - (0.1 * (mass_matrix * ddq)))) - wrench;
+  if(publish_values){
+    ext_cart_force_pub_x.publish(ext_cartesian_wrench(0));
+    ext_cart_force_pub_y.publish(ext_cartesian_wrench(1));
+    ext_cart_force_pub_z.publish(ext_cartesian_wrench(2));
+  }
+  return ext_cartesian_wrench;
+
 }
 
 void PandaJointVelocityContactController::starting(const ros::Time& /* time */) {
+    elapsed_time_ = ros::Duration(0.0);
+    franka::RobotState robot_state = state_handle_->getRobotState();
+    std::array<double, 7> gravity_array = model_handle_->getGravity();
+    Eigen::Map<Eigen::Matrix<double, 7, 1>> tau_measured(robot_state.tau_J.data());
+    Eigen::Map<Eigen::Matrix<double, 7, 1>> gravity(gravity_array.data());
+    // Bias correction for the current external torque
+    tau_ext_initial_ = tau_measured - gravity;
 }
 
 void PandaJointVelocityContactController::update(const ros::Time& time,
                                           const ros::Duration& period) {
     // Get current Franka::RobotState
+    elapsed_time_ += period;
     franka::RobotState robot_state = state_handle_->getRobotState();
+
+    // Get robot dynamics
+    // TODO: How can we move this so it's just one function call?
+    std::array<double, 42> jacobian_array = model_handle_->getZeroJacobian(franka::Frame::kEndEffector);
+    std::array<double, 7> gravity_array = model_handle_->getGravity();
+    std::array<double, 49> mass = model_handle_->getMass();
+    std::array<double, 7> coriolis = model_handle_->getCoriolis();
+    std::array<double, 7> joint_accs;
+
+    Eigen::Map<Eigen::Matrix<double, 6, 7>> jacobian(jacobian_array.data());
+    Eigen::Map<Eigen::Matrix<double, 7, 1>> tau_measured(robot_state.tau_J.data());
+    Eigen::Map<Eigen::Matrix<double, 7, 1>> gravity(gravity_array.data());
+    Eigen::Map<Eigen::Matrix<double, 7, 1>> q_dot(robot_state.dq.data());
+    Eigen::Map<Eigen::Matrix<double, 6, 1>> wrench(robot_state.O_F_ext_hat_K.data());
+    Eigen::Map<Eigen::Matrix<double, 7, 7>> mass_matrix(mass.data());
+    Eigen::Map<Eigen::Matrix<double, 7, 1>> coriolis_matrix(coriolis.data());
+
+    // get cartesian velocities
+    Eigen::MatrixXd x_dot = getCartesianVelocity(jacobian, q_dot, true);
+    updateSignalThresholds(x_dot);
+
+    // invert jac transpose
+    Eigen::MatrixXd jacobian_transpose_pinv = jacobian.transpose().completeOrthogonalDecomposition().pseudoInverse();
+    Eigen::Map<Eigen::Matrix<double, 6, 7>> pinv(jacobian_transpose_pinv.data());
+    
+    // Calculate the external wrench
+    Eigen::Map<Eigen::Matrix<double, 7, 1>> ddq = updateJointAcceleration(robot_state, joint_accs, period);
+    Eigen::MatrixXd ext_cartesian_wrench = getExternalWrench(pinv, tau_measured, gravity,
+                                                            coriolis_matrix, mass_matrix, 
+                                                            ddq, wrench, true);
+
+
+    // std::tuple<bool, float> x_signal_ret = signal_parser_x.getSignal(ext_cartesian_wrench(0));
+    std::tuple<bool, float> y_signal_ret = signal_parser_y.getSignal(ext_cartesian_wrench(1));
+    // std::tuple<bool, float> z_signal_ret = signal_parser_z.getSignal(ext_cartesian_wrench(2));
+    std::vector<double> external_wrench{ext_cartesian_wrench(0), ext_cartesian_wrench(1), ext_cartesian_wrench(2)};
+    std_msgs::Float64MultiArray external_wrench_msg;
+    external_wrench_msg.data = external_wrench;
+    external_wrench_pub.publish(external_wrench_msg);
+
+    if (std::get<0>(y_signal_ret)){
+      loops_with_signal++;
+      std::cout << "outside limit:" << loops_with_signal << std::endl;
+      if (loops_with_signal > 5){
+        loops_without_signal = 0;
+        std::cout << "pause_movement:" << loops_with_signal << std::endl;
+        pause_movement = true;
+      }
+
+    } else{
+      loops_with_signal = 0;
+    }
 
     // If there is no command for more than 0.1 sec, set velocity to 0.0
     if (ros::Time::now().toSec() - last_time_called > 0.05) {
