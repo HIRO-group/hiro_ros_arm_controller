@@ -42,6 +42,14 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:aafb07af538e9eb9cb3fb34ebe91f897b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzScore.html#aafb07af538e9eb9cb3fb34ebe91f897b">current_mean</a></td></tr>
+<tr class="separator:aafb07af538e9eb9cb3fb34ebe91f897b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6016559694bec53a2272e5974a1dc35e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzScore.html#a6016559694bec53a2272e5974a1dc35e">current_raw_value</a></td></tr>
+<tr class="separator:a6016559694bec53a2272e5974a1dc35e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a368a2c4963d94d56376c3681b5fb21df"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzScore.html#a368a2c4963d94d56376c3681b5fb21df">current_signal</a></td></tr>
+<tr class="separator:a368a2c4963d94d56376c3681b5fb21df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abaf9d316119e6722fcfbf8ca8c6cfad4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzScore.html#abaf9d316119e6722fcfbf8ca8c6cfad4">current_stdDev</a></td></tr>
+<tr class="separator:abaf9d316119e6722fcfbf8ca8c6cfad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62784fc9e59233154d9fe1f455199fa8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzScore.html#a62784fc9e59233154d9fe1f455199fa8">influence</a> = 0</td></tr>
 <tr class="separator:a62784fc9e59233154d9fe1f455199fa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8912d3b8d3a0dfef668846d132bf144b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzScore.html#a8912d3b8d3a0dfef668846d132bf144b">lag</a> = 500</td></tr>
@@ -64,14 +72,6 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:aafb07af538e9eb9cb3fb34ebe91f897b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzScore.html#aafb07af538e9eb9cb3fb34ebe91f897b">current_mean</a></td></tr>
-<tr class="separator:aafb07af538e9eb9cb3fb34ebe91f897b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6016559694bec53a2272e5974a1dc35e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzScore.html#a6016559694bec53a2272e5974a1dc35e">current_raw_value</a></td></tr>
-<tr class="separator:a6016559694bec53a2272e5974a1dc35e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a368a2c4963d94d56376c3681b5fb21df"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzScore.html#a368a2c4963d94d56376c3681b5fb21df">current_signal</a></td></tr>
-<tr class="separator:a368a2c4963d94d56376c3681b5fb21df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abaf9d316119e6722fcfbf8ca8c6cfad4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzScore.html#abaf9d316119e6722fcfbf8ca8c6cfad4">current_stdDev</a></td></tr>
-<tr class="separator:abaf9d316119e6722fcfbf8ca8c6cfad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6049be51b898eee63082ae06af2963e7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzScore.html#a6049be51b898eee63082ae06af2963e7">lag_values</a></td></tr>
 <tr class="separator:a6049be51b898eee63082ae06af2963e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f70b7194c372aa391ce517fb2f22674"><td class="memItemLeft" align="right" valign="top">ros::Publisher&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzScore.html#a8f70b7194c372aa391ce517fb2f22674">pub_mean</a></td></tr>
@@ -270,22 +270,14 @@ Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">double zScore::current_mean</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00033">33</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00032">32</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
 
 </div>
 </div>
@@ -294,22 +286,14 @@ Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">double zScore::current_raw_value</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00035">35</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00034">34</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
 
 </div>
 </div>
@@ -318,22 +302,14 @@ Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">double zScore::current_signal</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00034">34</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00033">33</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
 
 </div>
 </div>
@@ -342,22 +318,14 @@ Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">double zScore::current_stdDev</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00032">32</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00031">31</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
 
 </div>
 </div>
@@ -413,7 +381,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00041">41</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00043">43</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
 
 </div>
 </div>
@@ -429,7 +397,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00022">22</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00023">23</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
 
 </div>
 </div>
@@ -453,7 +421,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00044">44</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00046">46</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
 
 </div>
 </div>
@@ -477,7 +445,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00046">46</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00048">48</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
 
 </div>
 </div>
@@ -501,7 +469,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00045">45</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00047">47</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
 
 </div>
 </div>
@@ -525,7 +493,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00048">48</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00050">50</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
 
 </div>
 </div>
@@ -549,7 +517,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00047">47</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00049">49</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
 
 </div>
 </div>
@@ -605,7 +573,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00037">37</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zScore_8h_source.html#l00039">39</a> of file <a class="el" href="zScore_8h_source.html">zScore.h</a>.</p>
 
 </div>
 </div>
@@ -619,7 +587,7 @@ Private Attributes</h2></td></tr>
 <hr size="1"><div style="align: right;">
 <a href="http://wiki.ros.org/hiro_ros_arm_controller">hiro_ros_arm_controller</a><br />
 Author(s): </br />
-<small>autogenerated on Sun Jan 31 2021 20:41:58</small>
+<small>autogenerated on Thu Feb 4 2021 03:06:17</small>
 </div>
 </body>
 </html>
