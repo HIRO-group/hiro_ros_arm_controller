@@ -146,10 +146,10 @@ include_directories(
 
 ## Declare a C++ library
 add_library(hiro_ros_arm_controller
-  src/zScore.cpp
-  src/PandaJointVelocityController.cpp
-  src/PandaJointVelocityContactController.cpp
-  src/PandaJointPositionController.cpp
+src/zScore.cpp
+src/PandaJointVelocityController.cpp
+src/PandaJointVelocityContactController.cpp
+src/PandaJointPositionController.cpp
 )
 
 ## Add cmake target dependencies of the library
@@ -212,6 +212,7 @@ target_include_directories(hiro_ros_arm_controller SYSTEM PUBLIC
   ${Franka_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
+
 )
 
 install(TARGETS hiro_ros_arm_controller

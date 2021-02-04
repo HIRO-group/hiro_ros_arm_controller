@@ -111,11 +111,13 @@ class PandaJointVelocityContactController : public controller_interface::MultiIn
    ros::Publisher std_dev_negative_pub;
 
    ros::Publisher external_wrench_pub;
+   ros::Publisher external_signal_pub;
 
 
    zScore signal_parser_x;
    zScore signal_parser_y;
    zScore signal_parser_z;
+   zScore signal_parser_std_dev;
    // zScore signal_parser_sum;
 
 

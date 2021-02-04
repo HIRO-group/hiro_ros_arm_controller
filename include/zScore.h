@@ -19,20 +19,22 @@
       float influence = 0; // How much weight do we give to signaled values
       bool publish_values = true; // Do you want these values continuously published in ros?
       
+      // float max_threshold = 6.7;
       float max_threshold = 6.7;
+      // float max_threshold = 8;
       std::tuple<bool, float> getSignal(double new_value);
       double updateThreshold(double velocity);
 
       // Constructors
       zScore();
       zScore(ros::NodeHandle & node_handle, std::string topic_prefix);
-
-
-    private:
       double current_stdDev;
       double current_mean;
       double current_signal;
       double current_raw_value;
+
+
+    private:
 
       std::string topic_prefix = "not_set";
       double getStdDev(std::vector<double> data);

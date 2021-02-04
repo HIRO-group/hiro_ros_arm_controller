@@ -44,6 +44,7 @@ void PandaJointVelocityContactController::setPublishers( ros::NodeHandle& node_h
   cart_ext_sum = node_handle.advertise<std_msgs::Float64>("cart_ext_sum", 1);
 
   external_wrench_pub = node_handle.advertise<std_msgs::Float64MultiArray>("external_wrench", 1);
+  external_signal_pub = node_handle.advertise<std_msgs::Float64MultiArray>("external_signal", 1);
 
 }
 
@@ -119,6 +120,7 @@ void PandaJointVelocityContactController::setSignalParsers( ros::NodeHandle& nod
   this->signal_parser_x = zScore(node_handle, "x");
   this->signal_parser_y = zScore(node_handle, "y");
   this->signal_parser_z = zScore(node_handle, "z");
+  this->signal_parser_std_dev = zScore(node_handle, "std_dev");
 }
 
 void PandaJointVelocityContactController::setValueTrackers(){
@@ -228,20 +230,27 @@ void PandaJointVelocityContactController::update(const ros::Time& time,
                                                             ddq, wrench, true);
 
 
-    // std::tuple<bool, float> x_signal_ret = signal_parser_x.getSignal(ext_cartesian_wrench(0));
+    std::tuple<bool, float> x_signal_ret = signal_parser_x.getSignal(ext_cartesian_wrench(0));
     std::tuple<bool, float> y_signal_ret = signal_parser_y.getSignal(ext_cartesian_wrench(1));
-    // std::tuple<bool, float> z_signal_ret = signal_parser_z.getSignal(ext_cartesian_wrench(2));
-    std::vector<double> external_wrench{ext_cartesian_wrench(0), ext_cartesian_wrench(1), ext_cartesian_wrench(2)};
+    std::tuple<bool, float> z_signal_ret = signal_parser_z.getSignal(ext_cartesian_wrench(2));
+    // std::tuple<bool, float> std_dev_signal_ret = signal_parser_std_dev.getSignal(ext_cartesian_wrench(2));
+    
+    std::vector<double> external_wrench{wrench(0), wrench(1), wrench(2)};
+    std::vector<double> external_signal{std::get<1>(x_signal_ret), std::get<1>(y_signal_ret), std::get<1>(z_signal_ret)};
+    
     std_msgs::Float64MultiArray external_wrench_msg;
+    std_msgs::Float64MultiArray external_signal_msg;
+    
     external_wrench_msg.data = external_wrench;
+    external_signal_msg.data = external_signal;
+
     external_wrench_pub.publish(external_wrench_msg);
+    external_signal_pub.publish(external_signal_msg);
 
     if (std::get<0>(y_signal_ret)){
       loops_with_signal++;
-      std::cout << "outside limit:" << loops_with_signal << std::endl;
-      if (loops_with_signal > 5){
+      if (loops_with_signal > 10){
         loops_without_signal = 0;
-        std::cout << "pause_movement:" << loops_with_signal << std::endl;
         pause_movement = true;
       }
 
