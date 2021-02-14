@@ -419,4 +419,7 @@ if __name__ == '__main__':
 
     # publish the "zero" positions of the Panda.
     # note that one of the positions is not 0, due to the limits of the panda.
-    controller.publish_positions([0, 0, 0, -0.0698, 0, 0, 0])
+    # controller.publish_positions([0, 0, 0, -0.0698, 0, 0, 0])
+
+    # go to the move_to_start position
+    controller.publish_positions([-2.081132636986102180e-02, -7.952076877693172730e-01, -7.471356161587858202e-02, -2.375652358941864328e+00, -1.314155185139841142e-02, 1.482973709185918088e+00, 7.784897615158631323e-01])
