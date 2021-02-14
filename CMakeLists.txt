@@ -25,6 +25,8 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 find_package(Franka 0.5.0 REQUIRED)
+find_package(Eigen3 REQUIRED)
+
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -144,9 +146,10 @@ include_directories(
 
 ## Declare a C++ library
 add_library(hiro_ros_arm_controller
-  src/PandaJointVelocityController.cpp
-  src/PandaJointVelocityContactController.cpp
-  src/PandaJointPositionController.cpp
+src/zScore.cpp
+src/PandaJointVelocityController.cpp
+src/PandaJointVelocityContactController.cpp
+src/PandaJointPositionController.cpp
 )
 
 ## Add cmake target dependencies of the library
@@ -204,6 +207,14 @@ target_link_libraries(hiro_ros_arm_controller PUBLIC
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 # )
+
+target_include_directories(hiro_ros_arm_controller SYSTEM PUBLIC
+  ${Franka_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
+
+)
+
 install(TARGETS hiro_ros_arm_controller
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

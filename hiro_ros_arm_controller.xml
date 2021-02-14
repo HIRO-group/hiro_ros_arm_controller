@@ -4,7 +4,7 @@
       A controller that subscribes to a joint velocity topic and send to franka's hardware_interface.
     </description>
   </class>
-  <class name="hiro_ros_arm_controller/PandaJointVelocityContactController" type="hiro_panda::PandaJointVelocityController" base_class_type="controller_interface::ControllerBase">
+  <class name="hiro_ros_arm_controller/PandaJointVelocityContactController" type="hiro_panda::PandaJointVelocityContactController" base_class_type="controller_interface::ControllerBase">
     <description>
       A controller that subscribes to a joint velocity topic and send to franka's hardware_interface, while keeping track of contact
     </description>
