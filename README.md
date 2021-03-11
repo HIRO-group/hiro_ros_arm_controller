@@ -4,7 +4,7 @@
 Documentation Link: **http://hiro-group.ronc.one/hiro_ros_arm_controller/**
 
 A high level API (in the form of a ROS package) for controlling robotic arms in ROS.
-It works for both simulation and real robots.
+It works for both simulation and real robots, but has been primarily tested on the Franka Panda.
 
 # Supported Robotic Arms
 - Franka Emika Panda
@@ -67,7 +67,7 @@ specifies whether we want to build `libfranka` from source or install it via `ap
 # API
 In any of your ros packages, simply import our package.
 
-Joint Position Control Example
+Joint Position Control Example (in real life)
 ```py
 from hiro_ros_arm_controller.RobotController import PandaController
 
