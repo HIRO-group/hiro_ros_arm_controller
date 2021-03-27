@@ -136,11 +136,22 @@ Eigen::MatrixXd PandaJointVelocityContactController::getCartesianVelocity(
                                        Eigen::Map<Eigen::Matrix<double, 6, 7>> &jacobian,
                                        Eigen::Map<Eigen::Matrix<double, 7, 1>> &q_dot,
                                        bool publish_velocity){
+  // TODO(peasant98) -- fix confusing variable notation
   Eigen::MatrixXd x_dot = jacobian * q_dot;
   if(publish_velocity){
-    x_dot_pub.publish(x_dot(0));
-    y_dot_pub.publish(x_dot(1));
-    z_dot_pub.publish(x_dot(2));  
+    std_msgs::Float64 x_dot_msg;
+    x_dot_msg.data = x_dot(0);
+
+    std_msgs::Float64 y_dot_msg;
+    y_dot_msg.data = x_dot(1);
+
+    std_msgs::Float64 z_dot_msg;
+    z_dot_msg.data = x_dot(2);
+
+
+    x_dot_pub.publish(x_dot_msg);
+    y_dot_pub.publish(y_dot_msg);
+    z_dot_pub.publish(z_dot_msg);  
   }
   return x_dot;
 }
@@ -175,9 +186,19 @@ Eigen::Map<Eigen::Matrix<double, 7, 1>> PandaJointVelocityContactController::upd
   Eigen::VectorXd tau_ext = tau_measured - gravity - tau_ext_initial_;
   Eigen::MatrixXd ext_cartesian_wrench = (pinv  * (tau_measured - gravity -  coriolis_matrix - (0.1 * (mass_matrix * ddq)))) - wrench;
   if(publish_values){
-    ext_cart_force_pub_x.publish(ext_cartesian_wrench(0));
-    ext_cart_force_pub_y.publish(ext_cartesian_wrench(1));
-    ext_cart_force_pub_z.publish(ext_cartesian_wrench(2));
+
+    std_msgs::Float64 ext_force_x_msg;
+    ext_force_x_msg.data = ext_cartesian_wrench(0);
+
+    std_msgs::Float64 ext_force_y_msg;
+    ext_force_y_msg.data = ext_cartesian_wrench(1);
+
+    std_msgs::Float64 ext_force_z_msg;
+    ext_force_z_msg.data = ext_cartesian_wrench(2);
+
+    ext_cart_force_pub_x.publish(ext_force_x_msg);
+    ext_cart_force_pub_y.publish(ext_force_y_msg);
+    ext_cart_force_pub_z.publish(ext_force_z_msg);
   }
   return ext_cartesian_wrench;
 
