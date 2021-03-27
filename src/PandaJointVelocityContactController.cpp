@@ -240,7 +240,6 @@ void PandaJointVelocityContactController::update(const ros::Time& time,
     Eigen::MatrixXd x_dot = getCartesianVelocity(jacobian, q_dot, true);
     updateSignalThresholds(x_dot);
 
-    // invert jac transpose
     // Eigen::MatrixXd jacobian_transpose_pinv = jacobian.transpose().completeOrthogonalDecomposition().pseudoInverse();
     // Eigen::Map<Eigen::Matrix<double, 6, 7>> pinv(jacobian_transpose_pinv.data());
     

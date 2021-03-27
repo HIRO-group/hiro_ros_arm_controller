@@ -1,5 +1,4 @@
 # HIRO ROS Arm Controller
-`hiro_ros_arm_controller`
 
 Documentation Link: **http://hiro-group.ronc.one/hiro_ros_arm_controller/**
 
@@ -15,8 +14,9 @@ Assuming that you already have a catkin workspace:
 ```sh
 mkdir -p ~/catkin_ws/src
 cd src
-git clone git@github.com:HIRO-group/hiro_ros_arm_controller.git
+git clone https://github.com:HIRO-group/hiro_ros_arm_controller
 cd hiro_ros_arm_controller
+# runs the install script
 ./install.sh
 cd ../..
 catkin build   # or catkin_make
@@ -61,7 +61,7 @@ This command will build `libfranka` from source and use ssh for git.
 - `--git-option` <br>
 specifies if we clone the `HIRO` repos via https or ssh.
 
-- `franka_build` <br>
+- `--franka_build` <br>
 specifies whether we want to build `libfranka` from source or install it via `apt`.
 
 # API
