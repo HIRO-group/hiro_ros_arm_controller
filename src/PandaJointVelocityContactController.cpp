@@ -241,16 +241,16 @@ void PandaJointVelocityContactController::update(const ros::Time& time,
     updateSignalThresholds(x_dot);
 
     // invert jac transpose
-    Eigen::MatrixXd jacobian_transpose_pinv = jacobian.transpose().completeOrthogonalDecomposition().pseudoInverse();
-    Eigen::Map<Eigen::Matrix<double, 6, 7>> pinv(jacobian_transpose_pinv.data());
+    // Eigen::MatrixXd jacobian_transpose_pinv = jacobian.transpose().completeOrthogonalDecomposition().pseudoInverse();
+    // Eigen::Map<Eigen::Matrix<double, 6, 7>> pinv(jacobian_transpose_pinv.data());
     
     // Calculate the external wrench
     Eigen::Map<Eigen::Matrix<double, 7, 1>> ddq = updateJointAcceleration(robot_state, joint_accs, period);
-    Eigen::MatrixXd ext_cartesian_wrench = getExternalWrench(pinv, tau_measured, gravity,
-                                                            coriolis_matrix, mass_matrix, 
-                                                            ddq, wrench, true);
+    // Eigen::MatrixXd ext_cartesian_wrench = getExternalWrench(pinv, tau_measured, gravity,
+    //                                                         coriolis_matrix, mass_matrix, 
+    //                                                         ddq, wrench, true);
 
-
+    Eigen::MatrixXd ext_cartesian_wrench = Eigen::Vector3d(0.0, 0.0, 0.0);
     std::tuple<bool, float> x_signal_ret = signal_parser_x.getSignal(ext_cartesian_wrench(0));
     std::tuple<bool, float> y_signal_ret = signal_parser_y.getSignal(ext_cartesian_wrench(1));
     std::tuple<bool, float> z_signal_ret = signal_parser_z.getSignal(ext_cartesian_wrench(2));
