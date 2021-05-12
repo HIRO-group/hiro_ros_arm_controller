@@ -13,5 +13,5 @@
   </include>
 
   <rosparam command="load" file="$(find hiro_ros_arm_controller)/param/panda_joint_controllers.yaml"/>
-  <node name="panda_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="panda_joint_velocity_controller"/>
+  <node name="panda_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="panda_joint_velocity_controller --stopped panda_joint_position_controller"/>
 </launch>
