@@ -77,11 +77,27 @@ void zScore::publishValues(){
 
     if(this->publish_values){
         //Create all topics we will publish values to
-        pub_mean.publish(current_mean);
-        pub_positive_threshold.publish(current_mean + current_stdDev * threshold);
-        pub_negative_threshold.publish(current_mean - current_stdDev * threshold);
-        pub_signal.publish(current_signal);
-        pub_raw_value.publish(current_raw_value);
+
+        std_msgs::Float64 current_mean_msg;
+        current_mean_msg.data = current_mean;
+
+        std_msgs::Float64 positive_threshold_msg;
+        positive_threshold_msg.data = current_mean + current_stdDev * threshold;
+
+        std_msgs::Float64 negative_threshold_msg;
+        negative_threshold_msg.data = current_mean - current_stdDev * threshold;
+
+        std_msgs::Float64 current_signal_msg;
+        current_signal_msg.data = current_signal;
+
+        std_msgs::Float64 current_raw_value_msg;
+        current_raw_value_msg.data = current_raw_value;
+
+        pub_mean.publish(current_mean_msg);
+        pub_positive_threshold.publish(positive_threshold_msg);
+        pub_negative_threshold.publish(negative_threshold_msg);
+        pub_signal.publish(current_signal_msg);
+        pub_raw_value.publish(current_raw_value_msg);
     }
 }
 
