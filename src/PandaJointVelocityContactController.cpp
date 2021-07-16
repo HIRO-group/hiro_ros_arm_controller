@@ -220,7 +220,7 @@ void PandaJointVelocityContactController::update(const ros::Time& time,
     franka::RobotState robot_state = state_handle_->getRobotState();
 
     // Get robot dynamics
-    // TODO: How can we move this so it's just one function call?
+    // TODO(peasant98): How can we move this so it's just one function call?
     std::array<double, 42> jacobian_array = model_handle_->getZeroJacobian(franka::Frame::kEndEffector);
     std::array<double, 7> gravity_array = model_handle_->getGravity();
     std::array<double, 49> mass = model_handle_->getMass();
