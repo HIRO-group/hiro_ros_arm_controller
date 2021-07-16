@@ -1,3 +1,7 @@
+![Github Actions:Build](https://github.com/HIRO-group/hiro_ros_arm_controller/workflows/HIRO%20ROS%20arm%20controller%20CI/badge.svg)
+![Documentation Generation](https://github.com/HIRO-group/hiro_ros_arm_controller/workflows/Documentation%20Generation/badge.svg)
+
+
 # HIRO ROS Arm Controller
 
 Documentation Link: **http://hiro-group.ronc.one/hiro_ros_arm_controller/**
