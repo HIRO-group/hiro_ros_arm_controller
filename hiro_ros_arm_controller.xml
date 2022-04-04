@@ -14,4 +14,9 @@
       A controller that subscribes to a joint position topic and send to franka's hardware_interface.
     </description>
   </class>
+  <class name="hiro_ros_arm_controller/CylindricalObstacles" type="hiro_panda::CylindricalObstacles" base_class_type="controller_interface::ControllerBase">
+    <description>
+      Kelly's controller.
+    </description>
+  </class>
 </library>
